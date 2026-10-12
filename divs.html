@@ -42,10 +42,9 @@
     <input type="text" id="inputText">
 
     <button onclick="makeNewDiv()">Add end</button>
-
     <button onclick="addFront()">Add front</button>
-
     <button onclick="removeEveryOther()">Remove</button>
+    <button onclick="shuffle()">Shuffle</button>
 
     <script>
         function makeNewDiv() {
@@ -53,7 +52,7 @@
 
             let value = document.getElementById("inputText").value;
 
-            element.innerHTML = value;
+            element.textContent = value;
             element.className = "divlist";
 
             let container = document.getElementById("target");
@@ -66,7 +65,7 @@
 
             let value = document.getElementById("inputText").value;
 
-            element.innerHTML = value;
+            element.textContent = value;
             element.className = "divlist";
 
             let container = document.getElementById("target");
@@ -84,6 +83,33 @@
                     divListItems[i].remove();
                 }
             }
+        }
+
+        function shuffle() {
+            let divListItems = document.getElementsByClassName("divlist");
+
+            let length = divListItems.length;
+
+            if (length < 2) {
+                return;
+            }
+
+            let first = Math.floor(Math.random() * length);
+            let second = Math.floor(Math.random() * length);
+
+            while (first == second) {
+                second = Math.floor(Math.random() * length);
+            }
+
+            let container = document.getElementById("target");
+
+            let items = Array.from(divListItems);
+
+            let temp = items[first];
+            items[first] = items[second];
+            items[second] = temp;
+
+            container.replaceChildren(...items);
         }
     </script>
 

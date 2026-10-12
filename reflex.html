@@ -14,7 +14,6 @@
     <h1>Adam Bartout reflexes</h1>
 
     <div id="target">Your time</div>
-
     <div id="countdown">Count</div>
 
     <br>
@@ -46,12 +45,16 @@
             running = true;
             haltTime = undefined;
 
-            document.getElementById("target").innerHTML = "Your time";
+            // Random number from 2 to 10
+            let start = Math.floor(Math.random() * 9) + 2;
 
-            for (let i = 0; i <= 5; i++) {
+            document.getElementById("target").innerHTML =
+                "Your time";
+
+            for (let i = 0; i <= start; i++) {
                 setTimeout(function() {
                     document.getElementById("countdown").innerHTML = i;
-                }, (5 - i) * 1000);
+                }, (start - i) * 1000);
             }
 
             setTimeout(function() {
@@ -68,7 +71,7 @@
                 }
 
                 running = false;
-            }, 5000);
+            }, start * 1000);
         }
     </script>
 
