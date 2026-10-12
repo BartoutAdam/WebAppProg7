@@ -1,0 +1,44 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Reflex Timing Game</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+
+<body class="container mt-4">
+
+    <h1>Adam Bartout reflexes</h1>
+
+    <div id="target">Your time</div>
+
+    <div id="counter">Count</div>
+
+    <br>
+
+    <button type="button" class="btn btn-success" onclick="startGame()">
+        Go
+    </button>
+
+    <button type="button" class="btn btn-danger" onclick="recordTime()">
+        Halt
+    </button>
+
+    <script>
+        let haltTime = undefined;
+
+        function recordTime() {
+            haltTime = Date.now();
+            console.log(haltTime);
+        }
+
+        function startGame() {
+            console.log("Go button clicked");
+        }
+    </script>
+
+</body>
+</html>

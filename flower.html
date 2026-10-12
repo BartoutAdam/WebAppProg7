@@ -1,0 +1,206 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Flower Finder Game</title>
+    <meta charset="UTF-8">
+
+    <style>
+        .row {
+            display: flex;
+            justify-content: center;
+        }
+
+        .row div {
+            margin: 3px;
+        }
+
+        .row img {
+            width: 80px;
+            height: 80px;
+            object-fit: cover;
+            cursor: pointer;
+        }
+    </style>
+</head>
+
+<body>
+    <h1>Adam Bartout finds avians</h1>
+
+    <p>Click on the locations to find the flowers, watch out for the poison ivy</p>
+
+    <p id="locations">Number of locations checked is zero.</p>
+
+    <p id="score">Score is zero.</p>
+
+    <p onclick="help()" style="cursor:pointer; color:blue;">
+        Click for help.
+    </p>
+
+    <p id="help">Help report</p>
+
+    <div id="game"></div>
+
+    <script>
+        let ids = [
+            "img0", "img1", "img2", "img3", "img4", "img5",
+            "img6", "img7", "img8", "img9", "img10", "img11",
+            "img12", "img13", "img14", "img15", "img16", "img17",
+            "img18", "img19", "img20", "img21", "img22", "img23",
+            "img24", "img25", "img26", "img27", "img28", "img29",
+            "img30", "img31", "img32", "img33", "img34", "img35"
+        ];
+
+        let score = 0;
+        let locationsVisited = 0;
+        let lastLocation = 0;
+
+        let poisonLocation = 19;
+        let roseLocation = 14;
+        let lilyLocations = [3, 25];
+        let daisyLocations = [2, 5, 11, 20, 21];
+
+        let gameOver = false;
+
+        // Create the 6 by 6 game field
+        let game = document.getElementById("game");
+
+        for (let row = 0; row < 6; row++) {
+            let rowDiv = document.createElement("div");
+            rowDiv.className = "row";
+
+            for (let col = 0; col < 6; col++) {
+                let position = row * 6 + col;
+
+                let box = document.createElement("div");
+                let img = document.createElement("img");
+
+                img.src = "bush.jpg";
+                img.id = ids[position];
+                img.alt = "Bush";
+                img.onclick = function() {
+                    check(position);
+                };
+
+                box.appendChild(img);
+                rowDiv.appendChild(box);
+            }
+
+            game.appendChild(rowDiv);
+        }
+
+        function check(position) {
+            if (gameOver) {
+                return;
+            }
+
+            let id = ids[position];
+            let image = document.getElementById(id);
+
+            if (position == poisonLocation) {
+                image.src = "ivy.jpg";
+                image.alt = "Poison ivy";
+                score -= 4;
+                gameOver = true;
+                image.onclick = null;
+            }
+            else if (position == roseLocation) {
+                if (image.src.endsWith("bush.jpg")) {
+                    score += 4;
+                }
+                image.src = "rose.jpg";
+                image.alt = "Rose";
+            }
+            else if (lilyLocations.includes(position)) {
+                if (image.src.endsWith("bush.jpg")) {
+                    score += 2;
+                }
+                image.src = "lily.jpg";
+                image.alt = "Lily";
+            }
+            else if (daisyLocations.includes(position)) {
+                if (image.src.endsWith("bush.jpg")) {
+                    score += 1;
+                }
+                image.src = "daisy.jpg";
+                image.alt = "Daisy";
+            }
+            else {
+                image.onclick = null;
+            }
+
+            locationsVisited++;
+
+            document.getElementById("locations").innerHTML =
+                "Number of locations checked is " + locationsVisited + ".";
+
+            document.getElementById("score").innerHTML =
+                "Score is " + score + ".";
+
+            lastLocation = position;
+
+            if (gameOver) {
+                document.getElementById("help").innerHTML =
+                    "Game Over! You found poison ivy.";
+            }
+        }
+
+        function help() {
+            let row = Math.floor(lastLocation / 6);
+            let col = lastLocation % 6;
+
+            let result = "warm";
+
+            // Four closest neighbors with wrap around
+            let neighbors = [
+                (lastLocation + 1) % 36,
+                (lastLocation + 35) % 36,
+                (lastLocation + 6) % 36,
+                (lastLocation + 30) % 36
+            ];
+
+            for (let location of neighbors) {
+                if (daisyLocations.includes(location)) {
+                    result = "cold";
+                    document.getElementById("help").innerHTML = result;
+                    return result;
+                }
+            }
+
+            // Nine surrounding locations
+            for (let r = row - 1; r <= row + 1; r++) {
+                for (let c = col - 1; c <= col + 1; c++) {
+
+                    if (r >= 0 && r < 6 && c >= 0 && c < 6) {
+                        let location = r * 6 + c;
+
+                        if (location == roseLocation) {
+                            result = "hot";
+                            document.getElementById("help").innerHTML = result;
+                            return result;
+                        }
+                    }
+                }
+            }
+
+            for (let r = row - 1; r <= row + 1; r++) {
+                for (let c = col - 1; c <= col + 1; c++) {
+
+                    if (r >= 0 && r < 6 && c >= 0 && c < 6) {
+                        let location = r * 6 + c;
+
+                        if (location == poisonLocation) {
+                            result = "watch out";
+                            document.getElementById("help").innerHTML = result;
+                            return result;
+                        }
+                    }
+                }
+            }
+
+            document.getElementById("help").innerHTML = result;
+            return result;
+        }
+    </script>
+</body>
+</html>
